@@ -2857,6 +2857,16 @@ async function loadState(){
     state = local;
   }
 
+  // ensure defaults for properties that might be missing from remote/local
+  const DEFAULTS = {
+    pool: { name:'Bolão Copa 2026 — Trabalho', competition:'Copa do Mundo FIFA 2026', status:'setup', predictionsOpen:true },
+    rules: { exactScore:10, correctResult:3, oneTeamScore:1, champion:15, runnerUp:10, thirdPlace:5, turbo:[], customText:'' },
+    predictions: [], predictionHistory: [], specialPredictions: [], participants: [], matches: [], meta: {}
+  };
+  Object.keys(DEFAULTS).forEach(k => {
+    if(!state[k]) state[k] = typeof DEFAULTS[k]==='object' && !Array.isArray(DEFAULTS[k]) ? Object.assign({}, DEFAULTS[k]) : DEFAULTS[k];
+  });
+
   saveLocal();
 
   // fallback: seed admin if no participants
