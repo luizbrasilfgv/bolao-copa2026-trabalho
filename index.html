@@ -3093,7 +3093,7 @@ function showApp(){
   document.getElementById('mainApp').style.display='block';
   document.getElementById('hName').textContent = currentUser.name;
   document.getElementById('hAvatar').textContent = initials(currentUser.name);
-  document.getElementById('headerPoolName').textContent = state.pool.name || 'Bolão Copa 2026 — Trabalho';
+  document.getElementById('headerPoolName').innerHTML = (state.pool.name || 'Bolão Copa 2026 — Trabalho') + ' <span style="font-size:10px;opacity:0.6;margin-left:6px;font-weight:normal;">v1.1</span>';
   const badge = document.getElementById('hBadge');
   const roleLabel = {admin:'Admin', operator:'Operador', player:'Participante'};
   const roleClass = {admin:'admin', operator:'operator', player:'player'};
@@ -3950,7 +3950,7 @@ function renderHome(){
       ${completenessHTML}
     </div>`;
 
-  document.getElementById('view-home').innerHTML = heroHTML + pendencyHTML + statsHTML + specialHTML + quickHTML + recentHTML + dashboardHTML;
+  document.getElementById('view-home').innerHTML = heroHTML + pendencyHTML + statsHTML + dashboardHTML + specialHTML + quickHTML + recentHTML;
 }
 
 // ───────────────────────────────────────────
@@ -6454,7 +6454,7 @@ async function saveSettings(){
   state.pool.name = document.getElementById('sName').value.trim() || state.pool.name;
   state.pool.competition = document.getElementById('sComp').value.trim() || state.pool.competition;
   await saveState();
-  document.getElementById('headerPoolName').textContent = state.pool.name;
+  document.getElementById('headerPoolName').innerHTML = state.pool.name + ' <span style="font-size:10px;opacity:0.6;margin-left:6px;font-weight:normal;">v1.1</span>';
   document.getElementById('loginPoolName').textContent  = state.pool.name;
   toast('Configurações salvas!','ok');
 }
