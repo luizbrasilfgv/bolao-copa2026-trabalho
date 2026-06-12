@@ -1,10 +1,13 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Bolão Copa 2026</title>
 <meta name="description" content="Bolão da Copa do Mundo FIFA 2026">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <style>
 /* ═══════════════════════════════════════════
    BOLÃO COPA 2026 — STYLES
@@ -2199,6 +2202,19 @@ select.input {
     <select id="gfTeamSel" onchange="applyGlobalFilter('team',this.value)" style="background:var(--surface-2);border:1px solid var(--border-2);border-radius:8px;padding:5px 24px 5px 10px;font-size:12px;font-weight:600;color:var(--text);cursor:pointer;appearance:none;background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2210%22 height=%226%22%3E%3Cpath d=%22M1 1l4 4 4-4%22 stroke=%22%236b7a95%22 stroke-width=%221.5%22 fill=%22none%22 stroke-linecap=%22round%22/%3E%3C/svg%3E');background-repeat:no-repeat;background-position:right 8px center;outline:none;">
       <option value="all">Todos os times</option>
     </select>
+    <select id="gfPhaseSel" onchange="applyGlobalFilter('phase',this.value)" style="background:var(--surface-2);border:1px solid var(--border-2);border-radius:8px;padding:5px 24px 5px 10px;font-size:12px;font-weight:600;color:var(--text);cursor:pointer;appearance:none;background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2210%22 height=%226%22%3E%3Cpath d=%22M1 1l4 4 4-4%22 stroke=%22%236b7a95%22 stroke-width=%221.5%22 fill=%22none%22 stroke-linecap=%22round%22/%3E%3C/svg%3E');background-repeat:no-repeat;background-position:right 8px center;outline:none;">
+      <option value="all">Todas as fases</option>
+      <option value="Fase de Grupos">Grupos</option>
+      <option value="Oitavas (R32)">R32</option>
+      <option value="Oitavas de Final">Oitavas</option>
+      <option value="Quartas de Final">Quartas</option>
+      <option value="Semifinal">Semi</option>
+      <option value="Terceiro Lugar">3º Lugar</option>
+      <option value="Final">Final</option>
+    </select>
+    <select id="gfDaySel" onchange="applyGlobalFilter('day',this.value)" style="background:var(--surface-2);border:1px solid var(--border-2);border-radius:8px;padding:5px 24px 5px 10px;font-size:12px;font-weight:600;color:var(--text);cursor:pointer;appearance:none;background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2210%22 height=%226%22%3E%3Cpath d=%22M1 1l4 4 4-4%22 stroke=%22%236b7a95%22 stroke-width=%221.5%22 fill=%22none%22 stroke-linecap=%22round%22/%3E%3C/svg%3E');background-repeat:no-repeat;background-position:right 8px center;outline:none;">
+      <option value="all">Todos os dias</option>
+    </select>
     <button id="gfClear" onclick="clearGlobalFilter()" style="display:none;font-size:11px;color:var(--muted);padding:4px 9px;border:1px solid var(--border-2);border-radius:6px;background:none;cursor:pointer;font-weight:700">✕ Limpar</button>
     <span id="gfStatus" style="font-size:11px;color:var(--gold-2);font-weight:800"></span>
   </div>
@@ -2392,7 +2408,7 @@ const COPA2026_MATCHES = (function(){
     ['A','South Korea','Czech Republic','2026-06-11T23:00','Guadalajara'],
     ['B','Canada','Bosnia and Herzegovina','2026-06-12T16:00','Toronto'],
     ['D','USA','Paraguay','2026-06-12T22:00','Los Angeles'],
-    ['D','Australia','Turkey','2026-06-13T01:00','Vancouver'],
+    ['D','Australia','Turkey','2026-06-14T01:00','Vancouver'],
     ['B','Qatar','Switzerland','2026-06-13T16:00','San Francisco'],
     ['C','Brazil','Morocco','2026-06-13T19:00','Nova York/Nova Jersey'],
     ['C','Haiti','Scotland','2026-06-13T22:00','Boston'],
@@ -2404,7 +2420,7 @@ const COPA2026_MATCHES = (function(){
     ['G','Belgium','Egypt','2026-06-15T16:00','Seattle'],
     ['H','Saudi Arabia','Uruguay','2026-06-15T19:00','Miami'],
     ['G','Iran','New Zealand','2026-06-15T22:00','Los Angeles'],
-    ['J','Argentina','Algeria','2026-06-16T14:00','Kansas City'],
+    ['J','Argentina','Algeria','2026-06-16T22:00','Kansas City'],
     ['I','France','Senegal','2026-06-16T16:00','Nova York/Nova Jersey'],
     ['I','Iraq','Norway','2026-06-16T19:00','Boston'],
     ['J','Austria','Jordan','2026-06-17T01:00','San Francisco'],
@@ -2417,7 +2433,7 @@ const COPA2026_MATCHES = (function(){
     ['B','Switzerland','Bosnia and Herzegovina','2026-06-18T16:00','Los Angeles'],
     ['B','Canada','Qatar','2026-06-18T19:00','Vancouver'],
     ['A','Mexico','South Korea','2026-06-18T22:00','Guadalajara'],
-    ['D','Turkey','Paraguay','2026-06-19T01:00','San Francisco'],
+    ['D','Turkey','Paraguay','2026-06-20T01:00','San Francisco'],
     ['D','USA','Australia','2026-06-19T16:00','Seattle'],
     ['C','Scotland','Morocco','2026-06-19T19:00','Boston'],
     ['C','Brazil','Haiti','2026-06-19T22:00','Filadélfia'],
@@ -2554,18 +2570,16 @@ const PHASE_SHORT = {
 // state, auth, jsonbin, modal, toast, navigation
 // ═══════════════════════════════════════════
 
-// — config — INSTÂNCIA TRABALHO
-// Banco: Firebase Realtime Database, nó próprio (isolado do bolão Desliga,
-// que vive em /state no mesmo projeto). Migrado do JSONBin em 11/06/2026.
-// Legado (arquivo morto, somente leitura): JSONBin bin 6a297340da38895dfea7007e
-// IMPORTANTE: as chaves de localStorage são diferentes das do Desliga porque os
-// dois bolões rodam no MESMO domínio (luizbrasilfgv.github.io) — chave igual
-// faria o estado de um bolão vazar para o banco do outro via merge.
+// — config —
+// Banco: Firebase Realtime Database (migrado do JSONBin em 11/06/2026 — o bin
+// atingiu o limite de 100KB do plano free e passou a rejeitar gravações).
+// Legado (arquivo morto, somente leitura): JSONBin bin 6a16f5f18ef04f453821630b
 const DB_URL = 'https://bolao-desliga-2026-default-rtdb.firebaseio.com/state-trabalho.json';
-const STORAGE = 'bolao_trabalho_v2';
-const SESSION_KEY = 'bolao_trabalho_session_v1';
+const STORAGE = 'bolao_copa2026_v2';
+const SESSION_KEY = 'bolao_session_v1';
 const THEME_KEY = 'bolao_theme';
 const BRACKET_STYLE_KEY = 'bolao_bracket_style';
+const APP_VERSION = 'v1.5.12t';
 
 // — state —
 let state = {
@@ -2589,7 +2603,7 @@ let state = {
 };
 
 let currentUser   = null;
-let globalFilter = { type:'all', value:'all' };
+let globalFilter = { group:'all', team:'all', phase:'all', day:'all' };
 let confirmCb     = null;
 let currentMatchTab = 'upcoming';   // 'upcoming' | 'live' | 'finished' | 'all'
 let currentPhaseFilter = 'all';
@@ -2791,6 +2805,13 @@ const SPECIAL_PRED_DEADLINE = new Date('2026-06-11T16:00:00-03:00');
 function isSpecialPredOpen(){
   return new Date() < SPECIAL_PRED_DEADLINE && state.pool.predictionsOpen;
 }
+// Retorna true se o usuário atual PODE enviar palpite especial agora:
+// — dentro do prazo normal, OU
+// — janela de override ativa pelo admin E usuário ainda não apostou (1 chance)
+function canSubmitSpecialPred(){
+  if(isSpecialPredOpen()) return true;
+  return state.pool.specialPredOpen === true && !getMySpecialPred();
+}
 
 function getParticipantStats(participantId){
   const preds = state.predictions.filter(p => p.participantId === participantId);
@@ -2876,6 +2897,16 @@ function normalizeState(s){
   s.rules = s.rules || {};
   s.pool  = s.pool  || {};
   s.meta  = s.meta  || {};
+  // Regenerate match datetimes from authoritative HTML schedule (source of truth)
+  // This self-heals any wrong datetime stored in Firebase whenever state loads.
+  if(s.matches.length && typeof COPA2026_MATCHES !== 'undefined'){
+    const schedMap = {};
+    COPA2026_MATCHES.forEach(m => { schedMap[m.id] = { datetime: m.datetime, deadline: m.deadline }; });
+    s.matches.forEach(m => {
+      const sched = schedMap[m.id];
+      if(sched){ m.datetime = sched.datetime; m.deadline = sched.deadline; }
+    });
+  }
   // anything coming from the server is, by definition, synced — strip volatile
   // local-only flags so a leaked "unsynced" never resurrects a fake pending bar
   s.predictions.forEach(p => { delete p.unsynced; delete p.originalHome; delete p.originalAway; });
@@ -2913,6 +2944,7 @@ async function loadState(){
   }
 
   saveLocal();
+  if(remote?.meta?.appVersion && remote.meta.appVersion > APP_VERSION) showVersionBanner();
 
   // fallback: seed admin if no participants
   if(!state.participants.length){
@@ -3029,6 +3061,7 @@ async function saveState(){
   state.meta = state.meta || {};
   state.meta.updatedAt = new Date().toISOString();
   state.meta.updatedBy = currentUser?.name || 'Sistema';
+  state.meta.appVersion = APP_VERSION;
   saveLocal();
 
   try{
@@ -3100,6 +3133,7 @@ async function syncFromServer(showFeedback){
       const activeView = document.querySelector('.view.active')?.id?.replace('view-','');
       if(activeView) goView(activeView);
       updateUnsavedIndicator();
+      if(remote?.meta?.appVersion && remote.meta.appVersion > APP_VERSION) showVersionBanner();
     }
     if(showFeedback) toast('Dados atualizados ✓','ok');
     return true;
@@ -3108,6 +3142,16 @@ async function syncFromServer(showFeedback){
     if(showFeedback) toast('Não foi possível atualizar agora — tente em instantes','err');
     return false;
   }
+}
+
+function showVersionBanner(){
+  if(document.getElementById('version-banner')) return;
+  const bar = document.createElement('div');
+  bar.id = 'version-banner';
+  bar.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:9999;background:#f59e0b;color:#1a1a1a;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;font-weight:600;font-size:14px;box-shadow:0 2px 8px rgba(0,0,0,.4);gap:12px';
+  bar.innerHTML = '<span>⚠️ Versão desatualizada — atualize para não perder palpites nem ver dados incorretos.</span>'
+    + '<button onclick="window.location.replace(window.location.pathname+\'?v=\'+Date.now())" style="background:#1a1a1a;color:#fff;border:none;padding:7px 16px;border-radius:6px;cursor:pointer;font-size:13px;font-weight:700;white-space:nowrap;flex-shrink:0">Atualizar agora</button>';
+  document.body.prepend(bar);
 }
 
 async function manualSync(btn){
@@ -3236,7 +3280,7 @@ function showApp(){
   document.getElementById('mainApp').style.display='block';
   document.getElementById('hName').textContent = currentUser.name;
   document.getElementById('hAvatar').textContent = initials(currentUser.name);
-  document.getElementById('headerPoolName').innerHTML = esc(state.pool.name || 'Bolão Copa 2026') + ' <span style="font-size:10px;opacity:0.6;margin-left:6px;font-weight:normal;">v1.5.2</span>';
+  document.getElementById('headerPoolName').innerHTML = esc(state.pool.name || 'Bolão Copa 2026') + ' <span style="font-size:10px;opacity:0.6;margin-left:6px;font-weight:normal;">' + APP_VERSION + '</span>';
   const badge = document.getElementById('hBadge');
   const roleLabel = {admin:'Admin', operator:'Operador', player:'Participante'};
   const roleClass = {admin:'admin', operator:'operator', player:'player'};
@@ -3245,6 +3289,7 @@ function showApp(){
   document.querySelectorAll('.admin-only').forEach(el => el.style.display = isAdmin() ? '' : 'none');
   document.querySelectorAll('.operator-only').forEach(el => el.style.display = isOperator() ? '' : 'none');
   buildGlobalTeamSelect(null);
+  buildGlobalDaySelect('all');
   updateUnsavedIndicator();
   goView('home', document.querySelector('[data-view="home"]'));
 }
@@ -3366,11 +3411,8 @@ function renderHistorico(participantId){
     .map(p => ({ p, stats: getParticipantStats(p.id) }))
     .sort((a,b) => b.stats.total - a.stats.total);
 
-  const phases = ['all', ...new Set(state.matches.map(m=>m.phase).filter(Boolean))];
-  const filteredMatches = (historicoFilter.phase === 'all'
-    ? state.matches
-    : state.matches.filter(m => m.phase === historicoFilter.phase)
-  ).sort((a,b) => (a.datetime||'').localeCompare(b.datetime||''));
+  const filteredMatches = applyGlobalFilterToMatches(state.matches)
+    .sort((a,b) => (a.datetime||'').localeCompare(b.datetime||''));
 
   const matchesWithPreds = filteredMatches.filter(m =>
     state.predictions.some(p => p.matchId === m.id)
@@ -3385,18 +3427,11 @@ function renderHistorico(participantId){
     return 'var(--border)';
   }
 
-  const phaseChips = phases.map(p =>
-    `<button onclick="historicoFilter.phase='${p}';renderHistorico(null)"
-      style="padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;border:1px solid ${historicoFilter.phase===p?'var(--gold)':'var(--border-2)'};background:${historicoFilter.phase===p?'var(--gold)':'var(--surface-2)'};color:${historicoFilter.phase===p?'#000':'var(--muted)'}">
-      ${p==='all'?'Todos':(PHASE_SHORT[p]||p)}
-    </button>`
-  ).join('');
-
   if(!matchesWithPreds.length){
     view.innerHTML = `
       <div class="section-title">Historico de Palpites</div>
-      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px">${phaseChips}</div>
       <div class="panel"><div class="empty"><div class="icon">📊</div><div class="title">Nenhum palpite ainda</div><p>Os palpites aparecerão aqui após serem enviados.</p></div></div>`;
+    view.innerHTML += specialPredsTableHTML();
     return;
   }
 
@@ -3447,7 +3482,6 @@ function renderHistorico(participantId){
   view.innerHTML =
     '<div class="section-title">📊 Histórico de Palpites</div>'
     +'<div class="section-sub">Matriz completa · '+allPlayers.length+' apostador(es) · '+matchesWithPreds.length+' jogo(s) com palpites</div>'
-    +'<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px">'+phaseChips+'</div>'
     +'<div style="background:var(--surface-2);border:1px solid var(--border);border-radius:9px;padding:8px 12px;margin-bottom:14px;font-size:11px;display:flex;gap:16px;flex-wrap:wrap">'
     +'<span>🟢 <strong style="color:#22c55e">Placar exato</strong></span>'
     +'<span>🔵 <strong style="color:#3b82f6">Resultado certo</strong></span>'
@@ -3467,6 +3501,7 @@ function renderHistorico(participantId){
     +'</tr></thead>'
     +'<tbody>'+matrixRows+'</tbody>'
     +'</table></div></div>';
+  view.innerHTML += specialPredsTableHTML();
 }
 
 // ═══════════════════════════════════════════
@@ -3482,9 +3517,15 @@ function openSpecialPredModal(){
     `<option value="${t}">${teamName(t)}</option>`
   ).join('');
 
+  const overrideMode = !isSpecialPredOpen() && state.pool.specialPredOpen;
   const disclaimer = isEdit
     ? `<div style="background:rgba(255,182,39,.08);border:1px solid rgba(255,182,39,.3);border-radius:10px;padding:12px 14px;margin-bottom:18px;font-size:12px;color:var(--muted);line-height:1.6">
         ⚠️ <strong>Atenção:</strong> você já fez este palpite. Ao salvar novamente ele será substituído — mas somente enquanto o prazo estiver aberto (antes de 11/06 às 16h). Após o início do torneio, este palpite fica bloqueado permanentemente.
+      </div>`
+    : overrideMode
+    ? `<div style="background:rgba(255,71,87,.08);border:1px solid rgba(255,71,87,.3);border-radius:10px;padding:12px 14px;margin-bottom:18px;font-size:12px;line-height:1.6">
+        ⚠️ <strong style="color:var(--red)">ATENÇÃO — JANELA ESPECIAL REABERTA PELO ADMIN:</strong><br>
+        Você tem <strong>apenas esta oportunidade</strong>. Este palpite <strong>não poderá ser alterado após salvar</strong>. Certifique-se das suas escolhas antes de confirmar.
       </div>`
     : `<div style="background:rgba(255,71,87,.08);border:1px solid rgba(255,71,87,.3);border-radius:10px;padding:12px 14px;margin-bottom:18px;font-size:12px;line-height:1.6">
         🔒 <strong style="color:var(--red)">ATENÇÃO — LEIA ANTES DE SALVAR:</strong><br>
@@ -3545,8 +3586,13 @@ async function saveSpecialPred(){
     toast('Os três times precisam ser diferentes', 'err'); return;
   }
 
-  if(!isSpecialPredOpen()){
+  if(!canSubmitSpecialPred()){
     toast('Prazo encerrado — palpite especial bloqueado', 'err');
+    closeModal(); return;
+  }
+  // Override ativo mas usuário já apostou: bloqueia alteração (1 chance apenas)
+  if(!isSpecialPredOpen() && state.pool.specialPredOpen && getMySpecialPred()){
+    toast('Você já enviou seu palpite especial — não é possível alterar.', 'err');
     closeModal(); return;
   }
 
@@ -3586,58 +3632,95 @@ function buildGlobalTeamSelect(groupKey){
   const sorted = [...new Set(teams)].sort((a,b)=>teamName(a).localeCompare(teamName(b)));
   sel.innerHTML = `<option value="all">${groupKey&&groupKey!=='all'?'Todos do Gr.'+groupKey:'Todos os times'}</option>` +
     sorted.map(t=>`<option value="${t}">${teamName(t)}</option>`).join('');
-  if(globalFilter.type==='team') sel.value = globalFilter.value;
+  if(globalFilter.team !== 'all') sel.value = globalFilter.team;
+}
+
+function buildGlobalDaySelect(phaseKey){
+  const sel = document.getElementById('gfDaySel');
+  if(!sel) return;
+  const DAYS_PT = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+  let src = state.matches;
+  if(phaseKey && phaseKey !== 'all') src = src.filter(m => m.phase === phaseKey);
+  const datesSet = new Set();
+  src.forEach(m => {
+    if(!m.datetime) return;
+    const brtDate = new Date(new Date(m.datetime).getTime() - 3*3600*1000).toISOString().slice(0,10);
+    datesSet.add(brtDate);
+  });
+  const dates = [...datesSet].sort();
+  sel.innerHTML = `<option value="all">Todos os dias</option>` +
+    dates.map(d => {
+      const dt  = new Date(d + 'T12:00:00Z');
+      const dow = DAYS_PT[dt.getUTCDay()];
+      return `<option value="${d}">${d.slice(8)}/${d.slice(5,7)} ${dow}</option>`;
+    }).join('');
+  if(globalFilter.day !== 'all') sel.value = globalFilter.day;
+}
+
+function _gfUpdateUI(){
+  const DAYS_PT = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+  const ids = {group:'gfGroupSel', team:'gfTeamSel', phase:'gfPhaseSel', day:'gfDaySel'};
+  Object.entries(ids).forEach(([k,id]) => {
+    const el = document.getElementById(id);
+    if(el) el.style.borderColor = globalFilter[k] !== 'all' ? 'var(--gold)' : '';
+  });
+  const active = [];
+  if(globalFilter.group !== 'all') active.push('Grupo ' + globalFilter.group);
+  if(globalFilter.team  !== 'all') active.push(teamName(globalFilter.team));
+  if(globalFilter.phase !== 'all') active.push(PHASE_SHORT[globalFilter.phase] || globalFilter.phase);
+  if(globalFilter.day   !== 'all'){
+    const dt  = new Date(globalFilter.day + 'T12:00:00Z');
+    active.push(globalFilter.day.slice(8)+'/'+globalFilter.day.slice(5,7)+' '+DAYS_PT[dt.getUTCDay()]);
+  }
+  const status = document.getElementById('gfStatus');
+  if(status) status.textContent = active.length ? '— ' + active.join(' · ') : '';
+  const clear = document.getElementById('gfClear');
+  if(clear) clear.style.display = active.length ? '' : 'none';
 }
 
 function applyGlobalFilter(type, value){
-  if(value === 'all'){ clearGlobalFilter(); return; }
-  globalFilter = { type, value };
-  const gfGroup = document.getElementById('gfGroupSel');
-  const gfTeam  = document.getElementById('gfTeamSel');
-  if(type==='group'){
-    buildGlobalTeamSelect(value);
-    if(gfTeam) gfTeam.value = 'all';
-    if(gfGroup) gfGroup.style.borderColor = 'var(--gold)';
+  globalFilter[type] = value;
+  if(type === 'group'){
+    buildGlobalTeamSelect(value === 'all' ? null : value);
+    if(globalFilter.team !== 'all'){ globalFilter.team = 'all'; const s=document.getElementById('gfTeamSel'); if(s) s.value='all'; }
   }
-  if(type==='team'){
-    if(gfGroup) gfGroup.style.borderColor = '';
-    if(gfTeam)  gfTeam.style.borderColor  = 'var(--gold)';
+  if(type === 'phase'){
+    buildGlobalDaySelect(value);
+    if(globalFilter.day !== 'all'){ globalFilter.day = 'all'; const s=document.getElementById('gfDaySel'); if(s) s.value='all'; }
   }
-  const label = type==='group' ? `Grupo ${value}` : teamName(value);
-  const status = document.getElementById('gfStatus');
-  if(status) status.textContent = '— ' + label;
-  const clear = document.getElementById('gfClear');
-  if(clear) clear.style.display = '';
+  _gfUpdateUI();
   refreshGlobalFilterViews();
 }
 
 function clearGlobalFilter(){
-  globalFilter = { type:'all', value:'all' };
-  const gfGroup = document.getElementById('gfGroupSel');
-  const gfTeam  = document.getElementById('gfTeamSel');
-  if(gfGroup){ gfGroup.value='all'; gfGroup.style.borderColor=''; }
-  if(gfTeam) { buildGlobalTeamSelect(null); gfTeam.value='all'; gfTeam.style.borderColor=''; }
-  const status = document.getElementById('gfStatus');
-  if(status) status.textContent = '';
-  const clear = document.getElementById('gfClear');
-  if(clear) clear.style.display = 'none';
+  globalFilter = { group:'all', team:'all', phase:'all', day:'all' };
+  ['gfGroupSel','gfTeamSel','gfPhaseSel','gfDaySel'].forEach(id => {
+    const el = document.getElementById(id); if(el){ el.value='all'; el.style.borderColor=''; }
+  });
+  buildGlobalTeamSelect(null);
+  buildGlobalDaySelect('all');
+  const status = document.getElementById('gfStatus'); if(status) status.textContent='';
+  const clear  = document.getElementById('gfClear');  if(clear)  clear.style.display='none';
   refreshGlobalFilterViews();
 }
 
 function refreshGlobalFilterViews(){
   const activeView = document.querySelector('.view.active')?.id;
-  if(activeView === 'view-home')    renderHome();
-  if(activeView === 'view-matches') renderMatches();
+  if(activeView === 'view-home')      renderHome();
+  if(activeView === 'view-matches')   renderMatches();
+  if(activeView === 'view-historico') renderHistorico(historicoFilter.participantId);
 }
 
 function applyGlobalFilterToMatches(matches){
-  if(globalFilter.type === 'all') return matches;
-  if(globalFilter.type === 'group') return matches.filter(m => m.group === globalFilter.value);
-  if(globalFilter.type === 'team'){
-    const t = globalFilter.value;
-    return matches.filter(m => m.home === t || m.away === t);
-  }
-  return matches;
+  let out = matches;
+  if(globalFilter.group !== 'all') out = out.filter(m => m.group === globalFilter.group);
+  if(globalFilter.team  !== 'all'){ const t=globalFilter.team; out = out.filter(m => m.home===t || m.away===t); }
+  if(globalFilter.phase !== 'all') out = out.filter(m => m.phase === globalFilter.phase);
+  if(globalFilter.day   !== 'all') out = out.filter(m => {
+    if(!m.datetime) return false;
+    return new Date(new Date(m.datetime).getTime()-3*3600*1000).toISOString().slice(0,10) === globalFilter.day;
+  });
+  return out;
 }
 
 // ═══════════════════════════════════════════
@@ -3780,7 +3863,7 @@ function renderHome(){
 
   // recent results with my pred — filtered by global filter
   const recent = applyGlobalFilterToMatches(state.matches)
-    .filter(m => m.status==='finished' && m.result?.home !== null)
+    .filter(m => m.status==='finished' && m.result?.home != null)
     .sort((a,b) => (b.datetime||'').localeCompare(a.datetime||''))
     .slice(0, 4);
 
@@ -3907,18 +3990,23 @@ function renderHome(){
   }
 
   // — SPECIAL PREDICTION CARD —
-  const mySpecial = getMySpecialPred();
-  const specOpen  = isSpecialPredOpen();
-  let specialHTML = '';
+  const mySpecial  = getMySpecialPred();
+  const specOpen   = isSpecialPredOpen();
+  const canSpecial = canSubmitSpecialPred();
+  let specialHTML  = '';
 
-  if(specOpen && !mySpecial){
+  if(canSpecial && !mySpecial){
+    const overrideMode = !specOpen && state.pool.specialPredOpen;
+    const subline = overrideMode
+      ? '⚠️ Janela reaberta pelo admin · <strong style="color:var(--red)">Única chance — não pode ser alterado após salvar!</strong>'
+      : 'Prazo: antes do 1º jogo · 11/06 às 16:00 · <strong style="color:var(--red)">Não pode ser alterado após salvar!</strong>';
     specialHTML = `
       <div class="panel special-pred-panel" style="margin-bottom:20px;border:2px solid var(--gold);background:linear-gradient(135deg,rgba(255,182,39,.06),var(--surface))">
         <div style="padding:16px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
           <div>
             <div style="font-size:12px;text-transform:uppercase;letter-spacing:1.5px;color:var(--gold-2);font-weight:800;margin-bottom:4px">🏆 Palpite especial</div>
             <div style="font-size:16px;font-weight:800">Quem vai ganhar a Copa?</div>
-            <div style="font-size:12px;color:var(--muted);margin-top:3px">Prazo: antes do 1º jogo · 11/06 às 16:00 · <strong style="color:var(--red)">Não pode ser alterado após salvar!</strong></div>
+            <div style="font-size:12px;color:var(--muted);margin-top:3px">${subline}</div>
           </div>
           <button class="btn btn-primary" onclick="openSpecialPredModal()">Fazer palpite especial →</button>
         </div>
@@ -4167,10 +4255,12 @@ function renderMatches(){
   // sort by datetime
   filtered.sort((a,b) => (a.datetime||'').localeCompare(b.datetime||''));
 
-  // group by day
+  // group by day (BRT date = UTC - 3h)
   const byDay = {};
   filtered.forEach(m => {
-    const key = m.datetime ? m.datetime.slice(0,10) : 'sem-data';
+    const key = m.datetime
+      ? new Date(new Date(m.datetime).getTime() - 3*3600*1000).toISOString().slice(0,10)
+      : 'sem-data';
     (byDay[key] = byDay[key] || []).push(m);
   });
 
@@ -4238,7 +4328,9 @@ function renderMatchesList(){
 
   const byDay = {};
   filtered.forEach(m => {
-    const key = m.datetime ? m.datetime.slice(0,10) : 'sem-data';
+    const key = m.datetime
+      ? new Date(new Date(m.datetime).getTime() - 3*3600*1000).toISOString().slice(0,10)
+      : 'sem-data';
     (byDay[key] = byDay[key] || []).push(m);
   });
 
@@ -4944,6 +5036,90 @@ async function importPreds(file){
 }
 
 // ───────────────────────────────────────────
+// SPECIAL PREDICTIONS TABLE (used in Ranking)
+// ───────────────────────────────────────────
+function specialPredsTableHTML(){
+  const allPlayers = state.participants.filter(p => !p.inactive && (p.role!=='admin' || p.alsoPlayer));
+  if(!allPlayers.length) return '';
+
+  const mySpecial = getMySpecialPred();
+  const isAdmin   = currentUser?.role === 'admin';
+
+  if(!mySpecial && !isAdmin){
+    return `
+      <div class="panel" style="margin-top:14px;border:1px solid rgba(255,182,39,.3)">
+        <div style="padding:28px 20px;text-align:center">
+          <div style="font-size:32px;margin-bottom:10px">🔒</div>
+          <div style="font-size:14px;font-weight:800;color:var(--gold-2);margin-bottom:6px">Palpites Especiais</div>
+          <div style="font-size:13px;color:var(--muted)">Envie seu palpite especial para ver as escolhas de todos os participantes.</div>
+        </div>
+      </div>`;
+  }
+
+  const finalMatch = state.matches.find(m => m.phase === 'Final' && m.status === 'finished');
+  const thirdMatch = state.matches.find(m => m.phase === 'Terceiro Lugar' && m.status === 'finished');
+  const realChamp  = matchWinner(finalMatch);
+  const realVice   = matchLoser(finalMatch);
+  const realThird  = matchWinner(thirdMatch);
+  const hasResults = !!(realChamp || realVice || realThird);
+
+  const cell = (val, real) => {
+    const hit  = real && val === real;
+    const miss = real && val !== real;
+    return `<td style="padding:6px 8px;text-align:center">
+      <div style="display:inline-flex;flex-direction:column;align-items:center;gap:2px;background:var(--surface-2);border-radius:8px;padding:5px 8px;border:1px solid ${hit?'var(--green-2)':miss?'rgba(255,71,87,.3)':'var(--border)'}">
+        ${flag(val,'sm')}
+        <span style="font-size:10px;font-weight:700;white-space:nowrap">${teamName(val)}</span>
+        ${hit?'<span style="font-size:9px;color:var(--green-2)">✓</span>':miss?'<span style="font-size:9px;color:var(--red)">✕</span>':''}
+      </div>
+    </td>`;
+  };
+
+  const rows = allPlayers.map(p => {
+    const sp   = (state.specialPredictions||[]).find(s => s.participantId === p.id);
+    const pts  = calcSpecialPoints(p.id);
+    const isMe = p.id === currentUser.id;
+    const nameTD = `<td style="padding:10px;font-weight:700;white-space:nowrap">${esc(p.name)}${isMe?' <span style="font-size:10px;background:rgba(46,123,255,.15);color:var(--blue);padding:1px 6px;border-radius:999px">você</span>':''}</td>`;
+    if(!sp) return `
+      <tr style="border-bottom:1px solid var(--border);${isMe?'background:rgba(46,123,255,.05);':''}">
+        ${nameTD}
+        <td colspan="4" style="padding:10px;text-align:center;color:var(--muted);font-size:11px;font-style:italic">não enviou</td>
+      </tr>`;
+    return `<tr style="border-bottom:1px solid var(--border);${isMe?'background:rgba(46,123,255,.05);':''}">
+      ${nameTD}
+      ${cell(sp.champion, realChamp)}
+      ${cell(sp.runnerUp, realVice)}
+      ${cell(sp.thirdPlace, realThird)}
+      <td style="padding:10px;text-align:right;font-family:var(--font-numeric);font-weight:900;color:var(--gold-2)">${hasResults ? pts : '—'}</td>
+    </tr>`;
+  });
+
+  const submitted = allPlayers.filter(p => (state.specialPredictions||[]).some(s => s.participantId === p.id)).length;
+
+  return `
+    <div class="panel" style="margin-top:14px;border:1px solid rgba(255,182,39,.3)">
+      <div style="padding:14px 20px;border-bottom:1px solid var(--border)">
+        <div style="font-size:13px;font-weight:800;color:var(--gold-2)">🏆 Palpites Especiais</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px">${submitted} de ${allPlayers.length} enviaram · quem vai ganhar a Copa?</div>
+      </div>
+      <div style="overflow-x:auto">
+        <table style="width:100%;border-collapse:collapse;font-size:12px">
+          <thead>
+            <tr style="border-bottom:2px solid var(--border)">
+              <th style="padding:8px 10px;text-align:left;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:1px">Participante</th>
+              <th style="padding:8px 10px;text-align:center;color:var(--gold-2);font-size:11px;font-weight:800">🥇 Campeão<br><span style="font-weight:400;color:var(--muted)">(+${state.rules.champion||15} pts)</span></th>
+              <th style="padding:8px 10px;text-align:center;color:#c0c0c0;font-size:11px;font-weight:800">🥈 Vice<br><span style="font-weight:400;color:var(--muted)">(+${state.rules.runnerUp||10} pts)</span></th>
+              <th style="padding:8px 10px;text-align:center;color:#cd7f32;font-size:11px;font-weight:800">🥉 Terceiro<br><span style="font-weight:400;color:var(--muted)">(+${state.rules.thirdPlace||5} pts)</span></th>
+              <th style="padding:8px 10px;text-align:right;color:var(--gold-2);font-size:11px;font-weight:800">PTS</th>
+            </tr>
+          </thead>
+          <tbody>${rows.join('')}</tbody>
+        </table>
+      </div>
+    </div>`;
+}
+
+// ───────────────────────────────────────────
 // RANKING
 // ───────────────────────────────────────────
 function renderRanking(){
@@ -5491,7 +5667,7 @@ async function opSyncTSDB(){
       });
 
       if(!match) return;
-      if(match.status === 'finished' && match.result?.home !== null) return; // já tem resultado
+      if(match.status === 'finished' && match.result?.home != null) return; // já tem resultado
 
       const swapped = norm(match.home) !== norm(apiHome);
       match.result  = { home: swapped ? a : h, away: swapped ? h : a };
@@ -6686,6 +6862,25 @@ function adminSettingsHTML(){
               ${state.pool.predictionsOpen?'Fechar palpites':'Abrir palpites'}
             </button>
           </div>
+          ${(()=>{
+            const semEspecial = (state.participants||[]).filter(p =>
+              !p.inactive && !(state.specialPredictions||[]).find(s => s.participantId === p.id)
+            );
+            return `<div style="display:flex;align-items:center;gap:14px;padding:14px;background:var(--surface-2);border:1px solid var(--border);border-radius:10px">
+              <div style="flex:1">
+                <div style="font-size:14px;font-weight:800">🏆 Janela de palpite especial</div>
+                <div style="font-size:12px;color:var(--muted);margin-top:3px">
+                  Sem palpite especial: <strong>${semEspecial.length}</strong> participante(s)
+                  ${semEspecial.length ? '('+semEspecial.map(p=>esc(p.name)).join(', ')+')' : '— todos já apostaram'}
+                </div>
+                <div style="font-size:11px;color:var(--muted);margin-top:2px">Quando aberta: 1 envio para quem ainda não apostou · quem já apostou permanece bloqueado</div>
+                <div style="font-size:12px;margin-top:4px">Janela: <strong style="color:${state.pool.specialPredOpen?'var(--green-2)':'var(--muted)'}">${state.pool.specialPredOpen?'ABERTA':'FECHADA'}</strong></div>
+              </div>
+              <button class="btn ${state.pool.specialPredOpen?'btn-danger':'btn-primary'} btn-sm" onclick="toggleSpecialPredOverride()" ${!semEspecial.length && !state.pool.specialPredOpen ? 'disabled title="Todos já apostaram"' : ''}>
+                ${state.pool.specialPredOpen?'🔒 Fechar janela':'🔓 Abrir janela'}
+              </button>
+            </div>`;
+          })()}
           <button class="btn btn-primary" onclick="saveSettings()">Salvar configurações</button>
         </div>
       </div>
@@ -6708,11 +6903,21 @@ async function togglePredOpen(){
   toast(`Palpites ${state.pool.predictionsOpen?'ABERTOS':'FECHADOS'}`,'ok');
 }
 
+async function toggleSpecialPredOverride(){
+  state.pool.specialPredOpen = !state.pool.specialPredOpen;
+  await saveState();
+  renderAdmin('settings');
+  toast(state.pool.specialPredOpen
+    ? '🔓 Janela aberta — quem ainda não apostou já pode enviar o palpite especial'
+    : '🔒 Janela fechada — palpites especiais bloqueados',
+    'ok');
+}
+
 async function saveSettings(){
   state.pool.name = document.getElementById('sName').value.trim() || state.pool.name;
   state.pool.competition = document.getElementById('sComp').value.trim() || state.pool.competition;
   await saveState();
-  document.getElementById('headerPoolName').innerHTML = esc(state.pool.name) + ' <span style="font-size:10px;opacity:0.6;margin-left:6px;font-weight:normal;">v1.5.2</span>';
+  document.getElementById('headerPoolName').innerHTML = esc(state.pool.name) + ' <span style="font-size:10px;opacity:0.6;margin-left:6px;font-weight:normal;">' + APP_VERSION + '</span>';
   document.getElementById('loginPoolName').textContent  = state.pool.name;
   toast('Configurações salvas!','ok');
 }
